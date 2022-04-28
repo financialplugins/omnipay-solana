@@ -4,7 +4,7 @@ namespace Omnipay\Solana\Message;
 
 use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
 
-abstract class AbstractRequest extends OmnipayAbstractRequest
+abstract class Request extends OmnipayAbstractRequest
 {
     protected $responseClass = Response::class;
 
@@ -25,7 +25,7 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
         return $this->getParameter('api_url');
     }
 
-    public function setApiUrl(string $value): AbstractRequest
+    public function setApiUrl(string $value): Request
     {
         $this->setParameter('api_url', $value);
 

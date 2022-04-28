@@ -3,6 +3,7 @@
 namespace Omnipay\Solana;
 
 use Omnipay\Common\AbstractGateway;
+use Omnipay\Solana\Message\FetchBalanceRequest;
 use Omnipay\Solana\Message\FetchTransactionRequest;
 
 class Gateway extends AbstractGateway
@@ -31,6 +32,11 @@ class Gateway extends AbstractGateway
         $this->setParameter('api_url', $value);
 
         return $this;
+    }
+
+    public function fetchBalance(array $parameters = [])
+    {
+        return $this->createRequest(FetchBalanceRequest::class, $parameters);
     }
 
     public function fetchTransaction(array $parameters = [])

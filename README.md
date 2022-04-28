@@ -14,10 +14,21 @@ $gateway = Omnipay::create('Solana');
 $gateway->initialize();
 ```
 
+### Fetch Address Balance
+
+Fetch address balance in lamports.
+
+```
+$response = $gateway->fetchBalance(['address' => '8Jd4NUfJJB4bXYEx36ZrEF7hxKqYyxh1cBkrspAJxDAw'])->send();
+
+if ($response->isSuccessful()) {
+    $data = $response->getData();
+} else {
+    $errorMessage = $response->getMessage();
+}
+```
 
 ### Fetch Transaction
-
-To fetch transaction details pass the transaction signature. Example: 
 
 ```
 $response = $gateway->fetchTransaction(['transactionReference' => '5vF7STm7q1v84THiJhL6BdvvYs9u2YvjwX5MjSmqJVdmu4x5SKsrc1QXveZREA7TaCnvrU96Ndc9Uxn3rVwwoemD'])->send();
