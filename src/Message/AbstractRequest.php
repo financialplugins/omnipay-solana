@@ -8,7 +8,17 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
 {
     protected $responseClass = Response::class;
 
+    /**
+     * Get endpoint for specific API request
+     *
+     * @return string
+     */
     abstract protected function getEnpoint(): string;
+
+    /**
+     * Validate request parameters
+     */
+    abstract protected function validateRequest(): void;
 
     public function getApiUrl(): string
     {
@@ -23,15 +33,7 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     }
 
     /**
-     * Validate request parameters
-     */
-    protected function validateRequest(): void
-    {
-        //
-    }
-
-    /**
-     * Get request URL parameters
+     * Get parameters that should be used (substituted) in the endpoint
      *
      * @return array
      */
@@ -41,7 +43,7 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     }
 
     /**
-     * Get request query parameters
+     * Get parameters that should be appended to the endpoint as query string
      *
      * @return array
      */
@@ -51,9 +53,9 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     }
 
     /**
-     * Get common request parameters
+     * Get relative URL for the request (to be passed to sendData() function)
      *
-     * @return array|mixed
+     * @return string
      */
     public function getData(): string
     {
@@ -64,13 +66,25 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
         return sprintf($this->getEnpoint(), ...$this->getRequestUrlParameters()) . ($query ? '?' . $query : '');
     }
 
-    public function sendData($query)
+    /**
+     * Make an API request
+     *
+     * @param $url
+     * @return \Omnipay\Common\Message\ResponseInterface|Response
+     */
+    public function sendData($url)
     {
-        $httpResponse = $this->httpClient->request('GET', $this->getApiUrl() . $query);
+        $httpResponse = $this->httpClient->request('GET', $this->getApiUrl() . $url);
 
         return $this->createResponse(json_decode($httpResponse->getBody()->getContents()));
     }
 
+    /**
+     * Make a response
+     *
+     * @param $data
+     * @return Response
+     */
     protected function createResponse($data): Response
     {
         return $this->response = new $this->responseClass($this, $data);
